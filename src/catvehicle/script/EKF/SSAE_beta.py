@@ -19,9 +19,9 @@ class Side_Slip_Angle_Estimation(Node):
             'start side slip angle estimation node ...'
         )
 
-        # ============================================================
+        
         # Set process and sensor noise for EKF of dynamics model
-        # ============================================================
+        
 
         self.process_noise_v_kd = np.array([[0.001],
                                             [0.001]])
@@ -35,9 +35,9 @@ class Side_Slip_Angle_Estimation(Node):
         self.R_kd = np.array([[0.005, 0],
                               [0, 0.005]])
 
-        # ============================================================
+        
         # Set process and sensor noise for EKF of kinematics model
-        # ============================================================
+        
 
         self.process_noise_v_kk = np.array([[0.1],
                                             [0.1]])
@@ -51,9 +51,9 @@ class Side_Slip_Angle_Estimation(Node):
         self.R_kk = np.array([[0.001, 0],
                               [0, 0.001]])
 
-        # ============================================================
+        
         # Set Constant Parameter of vehicle
-        # ============================================================
+        
 
         self.C_f = 169265.0
         self.C_r = 249962.5
@@ -62,9 +62,9 @@ class Side_Slip_Angle_Estimation(Node):
         self.m_v = 1883.239
         self.I_z = 2529.4827
 
-        # ============================================================
+        
         # Initialisation of EKF
-        # ============================================================
+        
 
         self.beta = []
         self.v_y = 0
@@ -82,16 +82,16 @@ class Side_Slip_Angle_Estimation(Node):
         self.P_dd = np.array([[0.1, 0],
                               [0, 0.1]])
 
-        # ============================================================
+        
         # Beta smoothing
-        # ============================================================
+        
 
         self.last_beta_smooth = 0
         self.beta_smooth_deque = deque(maxlen=1)
 
-        # ============================================================
+        
         # Trajectory calculation
-        # ============================================================
+        
 
         self.last_beta = 0
         self.x0 = 0
@@ -104,9 +104,9 @@ class Side_Slip_Angle_Estimation(Node):
 
         self.last_time = self.get_clock().now()
 
-        # ============================================================
+        
         # ROS2 Publishers
-        # ============================================================
+        
 
         self.pub1 = self.create_publisher(
             Float64,
@@ -132,9 +132,9 @@ class Side_Slip_Angle_Estimation(Node):
             10
         )
 
-        # ============================================================
+        
         # ROS2 Subscriber
-        # ============================================================
+        
 
         self.sub1 = self.create_subscription(
             Float64MultiArray,
@@ -143,9 +143,9 @@ class Side_Slip_Angle_Estimation(Node):
             10
         )
 
-    # ================================================================
+    
     # EKF update function of kinematics model
-    # ================================================================
+    
 
     def ekf_update_k(
         self,
@@ -241,9 +241,9 @@ class Side_Slip_Angle_Estimation(Node):
 
         return state_estimate_k, P_k
 
-    # ================================================================
+    
     # EKF update function of dynamics model
-    # ================================================================
+    
 
     def ekf_update_d(
         self,
@@ -339,9 +339,9 @@ class Side_Slip_Angle_Estimation(Node):
 
         return state_estimate_k, P_k
 
-    # ================================================================
+    
     # Kinematics parameters
-    # ================================================================
+    
 
     def get_kinematics_param(self, data, Delta_T):
         """
@@ -422,9 +422,9 @@ class Side_Slip_Angle_Estimation(Node):
 
         return A_kd, B_kd, C_kd, y_kd, u_kd
 
-    # ================================================================
+    
     # Dynamics parameters
-    # ================================================================
+    
 
     def get_dynamics_param(self, processed_data, dt):
         """
@@ -517,10 +517,10 @@ class Side_Slip_Angle_Estimation(Node):
             + 1 / 24 * A_d ** 4 * dt ** 4
         )
 
-        # ============================================================
+        
         # B_dd_0
         # Keep the original mathematical expression intact.
-        # ============================================================
+        
 
         B_dd_0 = (
             (
@@ -642,9 +642,9 @@ class Side_Slip_Angle_Estimation(Node):
             )
         )
 
-        # ============================================================
+        
         # B_dd_1
-        # ============================================================
+        
 
         B_dd_1 = (
             (
@@ -772,9 +772,9 @@ class Side_Slip_Angle_Estimation(Node):
 
         return A_dd, B_dd, C_d, D_d, y_d, u_d
 
-    # ================================================================
+    
     # Estimation callback
-    # ================================================================
+    
 
     def EstCallback(self, processed_data):
 
@@ -791,9 +791,9 @@ class Side_Slip_Angle_Estimation(Node):
 
         Delta_T = 0.1
 
-        # ============================================================
+        
         # Reset model when yaw rate is too small
-        # ============================================================
+        
 
         if np.abs(yaw_rate) < 0.01:
 
@@ -825,9 +825,9 @@ class Side_Slip_Angle_Estimation(Node):
             msg_beta.data = float(Beta)
             self.pub1.publish(msg_beta)
 
-        # ============================================================
+        
         # EKF estimation
-        # ============================================================
+        
 
         else:
 
@@ -951,9 +951,9 @@ class Side_Slip_Angle_Estimation(Node):
             #
             # self.last_beta = Beta
 
-        # ============================================================
+        
         # Calculate position and trajectory
-        # ============================================================
+        
 
         self.psi = (
             self.psi
@@ -977,9 +977,9 @@ class Side_Slip_Angle_Estimation(Node):
         self.x_buffer.append(self.x0)
         self.y_buffer.append(self.y0)
 
-        # ============================================================
+        
         # Publish trajectory data
-        # ============================================================
+        
 
         msg_x = Float64()
         msg_x.data = float(self.x0)
@@ -993,9 +993,9 @@ class Side_Slip_Angle_Estimation(Node):
         msg_psi.data = float(self.psi)
         self.pub4.publish(msg_psi)
 
-        # ============================================================
+        
         # Store test data as txt file for Matlab
-        # ============================================================
+        
 
         with open("x0.txt", "a") as f:
             f.write('\r')
@@ -1018,9 +1018,9 @@ class Side_Slip_Angle_Estimation(Node):
             f.write(str(deltav))
 
 
-# ====================================================================
+
 # ROS2 main
-# ====================================================================
+
 
 def main(args=None):
 

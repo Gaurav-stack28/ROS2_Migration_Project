@@ -1,77 +1,65 @@
-#!/usr/bin/env python
-
-import math
-import rospy
+#!/usr/bin/env python3
+import rclpy
 import message_filters
 import numpy as np
 from collections import deque
+from rclpy.node import Node
 from sensor_msgs.msg import JointState, Imu
-from geometry_msgs.msg import Twist
-from std_msgs.msg import Float64, Bool, Float64MultiArray
-
-
-class DataProcess(object):
+from std_msgs.msg import Float64, Float64MultiArray
+class DataProcess(Node):
     def __init__(self):
-        # init node
-        self.node_name = 'data_process'
-        rospy.init_node(self.node_name)
-
-        # set publish rate
-        self.r = rospy.Rate(100)
+        super().__init__('data_process')
         self.tyre_radius = 0.3671951254
         self.acc_y_deque = deque(maxlen=20)
-        self.yaw_old = 0
-
+        self.yaw_old = 0.0
         # Subscribers
-        imu_data = message_filters.Subscriber("/catvehicle/imu", Imu)
-        joint_data = message_filters.Subscriber("/catvehicle/joint_states", JointState)
-        steering_data = message_filters.Subscriber("/catvehicle/ste_angle", Float64)
-
-        sync = message_filters.ApproximateTimeSynchronizer([imu_data, joint_data, steering_data], 10, 1, allow_headerless=True)
-        sync.registerCallback(self.data_callback)
-
+        imu_data = message_filters.Subscriber( self, Imu, '/catvehicle/imu' )
+        joint_data = message_filters.Subscriber( self, JointState, '/catvehicle/joint_states' )
+        steering_data = message_filters.Subscriber( self, Float64, '/catvehicle/ste_angle' )
+        # Synchronizer
+        self.sync = message_filters.ApproximateTimeSynchronizer( [ imu_data, joint_data, steering_data ], queue_size=10, slop=1.0, allow_headerless=True )
+        self.sync.registerCallback(self.data_callback)
         # Publishers
-        self.pub1 = rospy.Publisher("/SSAE/processed_data", Float64MultiArray, queue_size=10)
-        self.pub2 = rospy.Publisher("/SSAE/deltav", Float64, queue_size=10)
-        self.pub3 = rospy.Publisher("/SSAE/yawrate", Float64, queue_size=10)
-        rospy.loginfo("start data process node ...")
-
-    def data_callback(self, imu_data, joint_states, steering_data):
+        self.pub1 = self.create_publisher( Float64MultiArray, '/SSAE/processed_data', 10 )
+        self.pub2 = self.create_publisher( Float64, '/SSAE/deltav', 10 )
+        self.pub3 = self.create_publisher( Float64, '/SSAE/yawrate', 10 )
+        self.get_logger().info( 'Start data process node ...' )
+    def data_callback( self, imu_data, joint_states, steering_data ):
         try:
-            # get sensor data from value
-            yaw_rate = imu_data.angular_velocity.z  # read yaw rate from imu sensor
-            # if yaw_rate > 0.1:
-            #     yaw_rate = 0.1
-            # elif yaw_rate < -0.1:
-            #     yaw_rate = -0.1
+            # Get sensor data
+            yaw_rate = imu_data.angular_velocity.z
             self.yaw_old = yaw_rate
-            acc_x = imu_data.linear_acceleration.x  # Read the linear acceleration in two direction
+            acc_x = imu_data.linear_acceleration.x
             acc_y_t = imu_data.linear_acceleration.y
             self.acc_y_deque.append(acc_y_t)
             acc_y = np.mean(self.acc_y_deque)
-
-            # calculate the longitudinal velocity
-            vel_x = joint_states.velocity[0] * self.tyre_radius
-            # get steering angle
+            # Calculate longitudinal velocity
+            vel_x = ( joint_states.velocity[0] * self.tyre_radius )
+            # Get steering angle
             steering_angle = steering_data.data
-
-            # get final output array
+            # Create processed output
             processed_data = Float64MultiArray()
-            processed_data.data = [acc_x, acc_y, yaw_rate, vel_x, steering_angle]
-            self.pub2.publish(steering_angle)
-            self.pub3.publish(yaw_rate)
+            processed_data.data = [ acc_x, acc_y, yaw_rate, vel_x, steering_angle ]
+            # Publish
+            deltav_msg = Float64()
+            deltav_msg.data = steering_angle
+            yawrate_msg = Float64()
+            yawrate_msg.data = yaw_rate
+            self.pub2.publish(deltav_msg)
+            self.pub3.publish(yawrate_msg)
             self.pub1.publish(processed_data)
-            self.r.sleep()
-            print('yaw rate', yaw_rate)
-
-        except(IndexError):
-            print(IndexError)
-            pass
-
-
-if __name__ == '__main__':
+            self.get_logger().info( f'yaw rate: {yaw_rate:.6f}' )
+        except IndexError:
+            self.get_logger().warning( 'IndexError while processing sensor data' )
+def main(args=None):
+    rclpy.init(args=args)
+    node = DataProcess()
     try:
-        DataProcess()
-        rospy.spin()
-    except rospy.ROSInterruptException:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
         pass
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
+if __name__ == '__main__':
+    main()
