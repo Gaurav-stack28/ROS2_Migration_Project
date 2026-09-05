@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<package format="3">
+
+  <name>sicktoolbox</name>
+
+  <version>1.0.103</version>
+
+  <description>
+    SICK Toolbox drivers for SICK laser rangefinders.
+
+    This package contains the ROS2 port of the SICK LIDAR Matlab/C++ Toolbox.
+
+    The SICK LIDAR Matlab/C++ Toolbox offers stable and easy-to-use C++ drivers
+    for SICK LMS 1xx, LMS 2xx and LD LIDARs.
+
+    Also included are configuration utilities, examples, and tutorials.
+  </description>
+
+
+  <maintainer email="chadrockey@gmail.com">
+    Chad Rockey
+  </maintainer>
+
+
+  <license>BSD</license>
+
+
+  <url type="website">
+    http://sicktoolbox.sourceforge.net/
+  </url>
+
+  <url type="bugtracker">
+    https://github.com/ros-drivers/sicktoolbox/issues
+  </url>
+
+  <url type="repository">
+    https://github.com/ros-drivers/sicktoolbox
+  </url>
+
+
+  <author email="derenick@lehigh.edu">
+    Jason Derenick
+  </author>
+
+  <author email="thm204@lehigh.edu">
+    Thomas Miller
+  </author>
+
+
+  <!-- ROS2 build system -->
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+
+  <!-- System dependency -->
+  <depend>libpthread-stubs0-dev</depend>
+
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+
+</package>

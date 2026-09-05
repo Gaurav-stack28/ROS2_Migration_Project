@@ -1,0 +1,51 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 50
+
+    # Publish joint states
+    joint_state_controller:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    # Rear left wheel velocity controller
+    joint1_velocity_controller:
+      type: velocity_controllers/JointGroupVelocityController
+
+    # Rear right wheel velocity controller
+    joint2_velocity_controller:
+      type: velocity_controllers/JointGroupVelocityController
+
+    # Front left steering position controller
+    front_left_steering_position_controller:
+      type: position_controllers/JointGroupPositionController
+
+    # Front right steering position controller
+    front_right_steering_position_controller:
+      type: position_controllers/JointGroupPositionController
+
+
+# Rear left wheel
+joint1_velocity_controller:
+  ros__parameters:
+    joints:
+      - back_left_wheel_joint
+
+
+# Rear right wheel
+joint2_velocity_controller:
+  ros__parameters:
+    joints:
+      - back_right_wheel_joint
+
+
+# Front left steering
+front_left_steering_position_controller:
+  ros__parameters:
+    joints:
+      - front_left_steering_joint
+
+
+# Front right steering
+front_right_steering_position_controller:
+  ros__parameters:
+    joints:
+      - front_right_steering_joint

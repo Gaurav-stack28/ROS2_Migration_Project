@@ -1,0 +1,12 @@
+<library path="velodyne_driver_component">
+
+  <class
+    name="velodyne_driver/VelodyneDriver"
+    type="velodyne_driver::VelodyneDriver"
+    base_class_type="rclcpp_components::NodeFactory">
+
+    Velodyne ROS2 Driver Component
+
+  </class>
+
+</library>

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<package format="3">
+
+  <name>cmdvel2gazebo</name>
+  <version>1.0.0</version>
+
+  <description>
+    This package is generated from cmdvel2gazebo Simulink model
+    and migrated from ROS1 to ROS2 Foxy.
+  </description>
+
+  <maintainer email="sprinkjm@email.arizona.edu">
+    Jonathan Sprinkle
+  </maintainer>
+
+  <license>BSD</license>
+
+  <!-- ROS2 build system -->
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <!-- ROS2 dependencies -->
+  <depend>rclcpp</depend>
+  <depend>geometry_msgs</depend>
+  <depend>std_msgs</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+
+</package>

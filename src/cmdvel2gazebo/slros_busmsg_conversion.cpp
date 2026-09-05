@@ -1,0 +1,78 @@
+#include "slros_busmsg_conversion.h"
+
+
+// Conversions between SL_Bus_cmdvel2gazebo_geometry_msgs_Twist
+// and geometry_msgs::msg::Twist
+
+void convertFromBus(
+    geometry_msgs::msg::Twist* msgPtr,
+    SL_Bus_cmdvel2gazebo_geometry_msgs_Twist const* busPtr)
+{
+    const std::string rosMessageType("geometry_msgs/msg/Twist");
+
+    convertFromBus(&msgPtr->angular, &busPtr->Angular);
+    convertFromBus(&msgPtr->linear, &busPtr->Linear);
+}
+
+
+void convertToBus(
+    SL_Bus_cmdvel2gazebo_geometry_msgs_Twist* busPtr,
+    geometry_msgs::msg::Twist const* msgPtr)
+{
+    const std::string rosMessageType("geometry_msgs/msg/Twist");
+
+    convertToBus(&busPtr->Angular, &msgPtr->angular);
+    convertToBus(&busPtr->Linear, &msgPtr->linear);
+}
+
+
+
+// Conversions between SL_Bus_cmdvel2gazebo_geometry_msgs_Vector3
+// and geometry_msgs::msg::Vector3
+
+void convertFromBus(
+    geometry_msgs::msg::Vector3* msgPtr,
+    SL_Bus_cmdvel2gazebo_geometry_msgs_Vector3 const* busPtr)
+{
+    const std::string rosMessageType("geometry_msgs/msg/Vector3");
+
+    msgPtr->x = busPtr->X;
+    msgPtr->y = busPtr->Y;
+    msgPtr->z = busPtr->Z;
+}
+
+
+void convertToBus(
+    SL_Bus_cmdvel2gazebo_geometry_msgs_Vector3* busPtr,
+    geometry_msgs::msg::Vector3 const* msgPtr)
+{
+    const std::string rosMessageType("geometry_msgs/msg/Vector3");
+
+    busPtr->X = msgPtr->x;
+    busPtr->Y = msgPtr->y;
+    busPtr->Z = msgPtr->z;
+}
+
+
+
+// Conversions between SL_Bus_cmdvel2gazebo_std_msgs_Float64
+// and std_msgs::msg::Float64
+
+void convertFromBus(
+    std_msgs::msg::Float64* msgPtr,
+    SL_Bus_cmdvel2gazebo_std_msgs_Float64 const* busPtr)
+{
+    const std::string rosMessageType("std_msgs/msg/Float64");
+
+    msgPtr->data = busPtr->Data;
+}
+
+
+void convertToBus(
+    SL_Bus_cmdvel2gazebo_std_msgs_Float64* busPtr,
+    std_msgs::msg::Float64 const* msgPtr)
+{
+    const std::string rosMessageType("std_msgs/msg/Float64");
+
+    busPtr->Data = msgPtr->data;
+}

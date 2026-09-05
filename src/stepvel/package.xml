@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<package format="3">
+
+  <name>stepvel</name>
+  <version>1.0.0</version>
+
+  <description>
+    ROS2 migrated package generated from Simulink stepvel model.
+  </description>
+
+  <maintainer email="rahulbhadani@email.arizona.edu">
+    Rahul Bhadani
+  </maintainer>
+
+  <license>BSD</license>
+
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+
+  <depend>rclcpp</depend>
+  <depend>geometry_msgs</depend>
+  <depend>std_msgs</depend>
+
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+
+</package>

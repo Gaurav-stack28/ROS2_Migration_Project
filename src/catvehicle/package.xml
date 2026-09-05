@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<package format="3">
+
+  <name>catvehicle</name>
+  <version>2.1.0</version>
+  <description>The catvehicle package (formerly known as azcar_sim)</description>
+
+  <maintainer email="sprinkjm@email.arizona.edu">Jonathan Sprinkle</maintainer>
+  <maintainer email="rahulbhadani@email.arizona.edu">Rahul Kumar Bhadani</maintainer>
+
+  <license>BSD</license>
+
+  <author email="sprinkjm@email.arizona.edu">Jonathan Sprinkle</author>
+  <author email="rahulkumarbhadani@email.arizona.edu">Rahul Bhadani</author>
+  <author>Sam Taylor</author>
+  <author email="kennondmckeever@email.arizona.edu">Kennon McKeever</author>
+  <author>Alex Warren</author>
+  <author email="smunjal@email.arizona.edu">Swati Munjal</author>
+  <author email="askang@email.arizona.edu">Ashley Kang</author>
+  <author email="mosfet@email.arizona.edu">Matt Bunting</author>
+  <author>Sean Whitsitt</author>
+
+  <!-- ====================================================== -->
+  <!-- ROS 2 build system                                     -->
+  <!-- ====================================================== -->
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <!-- ROS 2 interface generation -->
+  <buildtool_depend>rosidl_default_generators</buildtool_depend>
+
+  <!-- ====================================================== -->
+  <!-- ROS 2 dependencies                                    -->
+  <!-- ====================================================== -->
+
+  <depend>rclcpp</depend>
+  <depend>geometry_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>tf2</depend>
+  <depend>tf2_ros</depend>
+
+  <!-- ====================================================== -->
+  <!-- ROS 2 control dependencies                             -->
+  <!-- ====================================================== -->
+
+  <depend>controller_manager</depend>
+  <depend>gazebo_ros2_control</depend>
+  <depend>position_controllers</depend>
+  <depend>velocity_controllers</depend>
+  <depend>joint_state_broadcaster</depend>
+
+  <!-- ====================================================== -->
+  <!-- LiDAR dependencies                                    -->
+  <!-- ====================================================== -->
+
+  <depend>velodyne_pointcloud</depend>
+
+  <!-- ====================================================== -->
+  <!-- SICK dependencies                                     -->
+  <!-- ====================================================== -->
+
+  <depend>sicktoolbox</depend>
+  <depend>sicktoolbox_wrapper</depend>
+
+  <!-- ====================================================== -->
+  <!-- Other package dependencies                             -->
+  <!-- ====================================================== -->
+
+  <depend>obstaclestopper</depend>
+
+  <!-- ====================================================== -->
+  <!-- ROS 2 interface runtime                               -->
+  <!-- ====================================================== -->
+
+  <exec_depend>rosidl_default_runtime</exec_depend>
+
+  <!-- This package contains ROS 2 interfaces -->
+  <member_of_group>rosidl_interface_packages</member_of_group>
+
+  <!-- ====================================================== -->
+  <!-- Explicitly declare ROS 2 build type                   -->
+  <!-- ====================================================== -->
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+
+</package>
